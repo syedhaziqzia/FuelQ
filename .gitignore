@@ -1,0 +1,62 @@
+# ──────────────────────────────────────────────
+# Build outputs
+# ──────────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# ──────────────────────────────────────────────
+# Visual Studio artefacts
+# ──────────────────────────────────────────────
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.pidb
+.vscode/
+
+# ──────────────────────────────────────────────
+# NuGet
+# ──────────────────────────────────────────────
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ──────────────────────────────────────────────
+# Runtime / generated data
+# ──────────────────────────────────────────────
+[Dd]ata/Shell_Maskan_Queue_Data.csv
+
+# ──────────────────────────────────────────────
+# Reference / scratch files (never deploy)
+# ──────────────────────────────────────────────
+_reference_dump/
+
+# ──────────────────────────────────────────────
+# OS files
+# ──────────────────────────────────────────────
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ──────────────────────────────────────────────
+# Logs
+# ──────────────────────────────────────────────
+*.log
+*.log.*

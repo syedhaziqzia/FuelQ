@@ -1,0 +1,226 @@
+<UserControl x:Class="FuelQ.Views.EmpiricalDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:FuelQ.Controls"
+             Background="{StaticResource CanvasBackground}"
+             FontFamily="Segoe UI">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="220"/>
+        </Grid.RowDefinitions>
+
+        <!-- ── TOOLBAR ── -->
+        <Border Grid.Row="0"
+                Background="{StaticResource SidebarSurface}"
+                BorderBrush="{StaticResource CardBorder}"
+                BorderThickness="0,0,0,1"
+                Padding="16,12">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource SecondaryButton}"
+                        Content="⊕  Generate Baseline (320 rows)"
+                        Click="GenerateBaseline_Click" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource SecondaryButton}"
+                        Content="📂  Browse / Load CSV..."
+                        Click="BrowseCsv_Click" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource SecondaryButton}"
+                        Content="⚠  Detect Outliers (IQR)"
+                        Click="DetectOutliers_Click" Margin="0,0,8,0"/>
+                <Button Style="{StaticResource PrimaryButton}"
+                        Content="χ²  Run Chi-Square Test"
+                        Click="RunChiSquare_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── STATUS BAR ── -->
+        <Border Grid.Row="1"
+                Background="#050D1A"
+                BorderBrush="{StaticResource SidebarBorder}"
+                BorderThickness="0,0,0,1"
+                Padding="16,7">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="StatusRecords"
+                           Text="No data loaded"
+                           Foreground="{StaticResource TextSecondary}"
+                           FontSize="11.5" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <TextBlock x:Name="StatusOutliers"
+                           Visibility="Collapsed"
+                           Foreground="{StaticResource StatusRedText}"
+                           FontSize="11.5" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <TextBlock x:Name="StatusSession"
+                           Text=""
+                           Foreground="{StaticResource TextMuted}"
+                           FontSize="11" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── DATA GRID ── -->
+        <Border Grid.Row="2"
+                BorderBrush="{StaticResource CardBorder}"
+                BorderThickness="0,0,0,1">
+            <DataGrid x:Name="ObservationGrid"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      EnableRowVirtualization="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource RowBase}"/>
+                        <Setter Property="Foreground" Value="#B0C4DE"/>
+                        <Style.Triggers>
+                            <Trigger Property="AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="{StaticResource RowAlternate}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsOutlier}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource OutlierRow}"/>
+                                <Setter Property="Foreground" Value="{StaticResource StatusRedText}"/>
+                            </DataTrigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#1A2D50"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Vehicle ID"     Binding="{Binding VehicleId}"          Width="*" MinWidth="80"/>
+                    <DataGridTextColumn Header="Type"           Binding="{Binding VehicleType}"         Width="*" MinWidth="55"/>
+                    <DataGridTextColumn Header="Arrival Time"   Binding="{Binding ArrivalTime}"         Width="*" MinWidth="80"/>
+                    <DataGridTextColumn Header="Inter-Arrival (s)" Binding="{Binding InterArrivalTime}" Width="*" MinWidth="90"/>
+                    <DataGridTextColumn Header="Svc Start"      Binding="{Binding ServiceStartTime}"    Width="*" MinWidth="75"/>
+                    <DataGridTextColumn Header="Svc Dur (s)"    Binding="{Binding ServiceDuration}"     Width="*" MinWidth="80"/>
+                    <DataGridTextColumn Header="Dispensing (s)" Binding="{Binding DispensingDuration}"  Width="*" MinWidth="90"/>
+                    <DataGridTextColumn Header="Payment"        Binding="{Binding PaymentMethod}"       Width="*" MinWidth="75"/>
+                    <DataGridTextColumn Header="Fuel Grade"     Binding="{Binding FuelGrade}"           Width="*" MinWidth="75"/>
+                    <DataGridTextColumn Header="Extra Svc"      Binding="{Binding ExtraService}"        Width="*" MinWidth="70"/>
+                    <DataGridTextColumn Header="Receipt"        Binding="{Binding ReceiptStr}"          Width="*" MinWidth="60"/>
+                    <DataGridTextColumn Header="Svc End"        Binding="{Binding ServiceEndTime}"      Width="*" MinWidth="75"/>
+                    <DataGridTextColumn Header="System Time (s)" Binding="{Binding TotalSystemTime}"    Width="*" MinWidth="90"/>
+                    <DataGridTextColumn Header="Outlier"        Binding="{Binding OutlierStr}"          Width="*" MinWidth="60"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- ── BOTTOM ANALYTICS SPLIT ── -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="360"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Histograms -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource CardSurface}"
+                    BorderBrush="{StaticResource CardBorder}"
+                    BorderThickness="0,0,1,0"
+                    Padding="14,10">
+                <StackPanel>
+                    <TextBlock Text="Empirical Distributions Preview"
+                               Style="{StaticResource CardTitle}" Margin="0,0,0,8"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                            <TextBlock Text="INTER-ARRIVAL TIME (T)" FontSize="9" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentCyanBrush}"/>
+                            <controls:SimpleWpfChart x:Name="IatHistogram" Height="140" Mode="Bar"
+                                                     XAxisLabel="Time (s)" YAxisLabel="Count"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                            <TextBlock Text="SERVICE DURATION (S)" FontSize="9" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentCyanBrush}"/>
+                            <controls:SimpleWpfChart x:Name="SvcHistogram" Height="140" Mode="Bar"
+                                                     XAxisLabel="Duration (s)" YAxisLabel="Count"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Chi-Square Report -->
+            <Border Grid.Column="1"
+                    Background="{StaticResource CardSurface}"
+                    Padding="16,12">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="χ²  Chi-Square Test Report"
+                                   Style="{StaticResource CardTitle}"/>
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}"
+                                BorderThickness="1" CornerRadius="4" Padding="5,2" Margin="8,0,0,0">
+                            <TextBlock Text="Pearson χ²" FontSize="9"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                        </Border>
+                    </StackPanel>
+                    <TextBlock x:Name="ChiHypothesisLabel"
+                               Text="Tested Null Hypothesis: Exponential"
+                               Foreground="{StaticResource TextSecondary}" FontSize="11"
+                               Margin="0,0,0,8" TextWrapping="Wrap"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                            <TextBlock Text="BINS (K)" FontSize="8.5" FontWeight="Bold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="ChiBins" Text="—" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock Text="≥ 8 req. met" FontSize="9"
+                                       Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="3,0,3,0">
+                            <TextBlock Text="DEG. FREEDOM (DF)" FontSize="8.5" FontWeight="Bold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="ChiDf" Text="—" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock Text="k - 1 - p(=1)" FontSize="9"
+                                       Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Margin="6,0,0,0">
+                            <TextBlock Text="TEST STAT (χ²)" FontSize="8.5" FontWeight="Bold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="ChiStat" Text="—" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock x:Name="ChiStatHint" Text="χ² &lt; Critical" FontSize="9"
+                                       Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Separator Margin="0,8"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="CRITICAL VALUE" FontSize="8.5" FontWeight="Bold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="ChiCritical" Text="—" FontSize="18" FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="α = 0.05" FontSize="9" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="P-VALUE" FontSize="8.5" FontWeight="Bold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="ChiPValue" Text="—" FontSize="18" FontWeight="Bold"
+                                       Foreground="{StaticResource StatusGreenText}"/>
+                            <TextBlock Text="p &gt; 0.05" FontSize="9" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border x:Name="ChiVerdictBorder"
+                            Background="{StaticResource StatusGreenBg}"
+                            BorderBrush="{StaticResource StatusGreenBorder}"
+                            BorderThickness="1" CornerRadius="8"
+                            Padding="10,8" Margin="0,10,0,0">
+                        <TextBlock x:Name="ChiVerdict"
+                                   Text="Run Chi-Square test to see verdict."
+                                   Foreground="{StaticResource TextSecondary}"
+                                   FontSize="11" TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

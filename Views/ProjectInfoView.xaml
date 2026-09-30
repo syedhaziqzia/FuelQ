@@ -1,0 +1,289 @@
+<UserControl x:Class="FuelQ.Views.ProjectInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource CanvasBackground}"
+             FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="32,24,32,32">
+
+            <!-- ══ PAGE HEADER ══ -->
+            <Border Background="{StaticResource CardSurface}"
+                    BorderBrush="{StaticResource CardBorder}"
+                    BorderThickness="1" CornerRadius="12"
+                    Padding="26,20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,6">
+                            <Border Background="#1E3A8A" CornerRadius="8" Padding="10,4" Margin="0,0,10,0">
+                                <TextBlock Text="SHELL" FontSize="13" FontWeight="ExtraBold" Foreground="#FBBF24"/>
+                            </Border>
+                            <Border Background="#0C1F38" BorderBrush="{StaticResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="8,3" Margin="0,0,8,0">
+                                <TextBlock Text="GROUP G (7)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource AccentCyanBrush}"/>
+                            </Border>
+                            <Border Background="#06281D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" CornerRadius="6" Padding="8,3">
+                                <TextBlock Text="UBIT · BSCS - 6th" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource StatusGreenText}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <TextBlock Text="Shell Petrol Pump Maskan Branch Simulator"
+                                   FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,4,0,4"/>
+                        <TextBlock Text="Comprehensive Stochastic Queuing Analytics &amp; Discrete Event Simulator (DES)"
+                                   FontSize="13.5" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Empirically calibrated for the Shell forecourt at Maskan Chowrangi, Gulshan-e-Iqbal, Karachi. Provides 6 exact and approximation Kendall model solvers (M/M/1, M/M/s, M/G/1, M/G/s, G/G/1, G/G/s) alongside an event-by-event discrete-event simulation engine with full random draw logging, queue timelines, and performance comparisons."
+                                   Foreground="{StaticResource TextSecondary}" FontSize="12.5" TextWrapping="Wrap" LineHeight="19" MaxWidth="720"/>
+                    </StackPanel>
+
+                    <!-- Supervisor Badge Card -->
+                    <Border Grid.Column="1" Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="10" Padding="18,14" VerticalAlignment="Top" Margin="20,0,0,0" Width="230">
+                        <StackPanel>
+                            <TextBlock Text="PROJECT SUPERVISOR" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Dr. Shaista Rais" FontSize="15" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}" Margin="0,0,0,2"/>
+                            <TextBlock Text="Modeling &amp; Simulation" FontSize="12" Foreground="{StaticResource TextPrimary}" FontWeight="SemiBold"/>
+                            <TextBlock Text="UBIT, University of Karachi" FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,8"/>
+                            <Separator Background="{StaticResource CardBorder}" Margin="0,0,0,8"/>
+                            <TextBlock Text="Semester: BSCS VI (6th)" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="Location: Maskan, Karachi" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══ QUICK LAUNCH TILES ══ -->
+            <TextBlock Text="SIMULATION MODULES" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,10"/>
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Calculator Tile -->
+                <Button Grid.Column="0" Tag="1" Click="NavCard_Click"
+                        Background="{StaticResource CardSurface}"
+                        BorderBrush="{StaticResource CardBorder}"
+                        BorderThickness="1" Padding="20,18" Cursor="Hand"
+                        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                        Style="{StaticResource CardButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="10" Background="#1E3A8A" Margin="0,0,16,0" VerticalAlignment="Top">
+                            <TextBlock Text="🧮" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Queueing Model Calculator" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Instant analytical solutions for M/M/1, M/M/s, M/G/1, M/G/s, G/G/1, G/G/s." FontSize="12.5" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap" LineHeight="17" Margin="0,0,0,8"/>
+                            <TextBlock Text="Features: Dynamic distributions (Exponential, Uniform, Normal), Live utilization &amp; stability badges, Erlang-C, Pollaczek-Khinchine, Allen-Cunneen, Kingman approximations." FontSize="11" Foreground="{StaticResource AccentCyanBrush}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Button>
+
+                <!-- Simulator Tile -->
+                <Button Grid.Column="2" Tag="2" Click="NavCard_Click"
+                        Background="{StaticResource CardSurface}"
+                        BorderBrush="{StaticResource CardBorder}"
+                        BorderThickness="1" Padding="20,18" Cursor="Hand"
+                        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                        Style="{StaticResource CardButton}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="10" Background="#3B0764" Margin="0,0,16,0" VerticalAlignment="Top">
+                            <TextBlock Text="⚙️" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Discrete Event Simulator (DES)" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Event-by-event stochastic simulation of vehicle arrivals, fueling pumps, and departures." FontSize="12.5" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap" LineHeight="17" Margin="0,0,0,8"/>
+                            <TextBlock Text="Features: Random number draw table, complete event log, aggregate KPIs, Simulated vs Theoretical delta, interactive Q(t) timeline, and waiting time histogram." FontSize="11" Foreground="#C084FC" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Button>
+            </Grid>
+
+            <!-- ══ PROJECT TEAM (GROUP G - 7 MEMBERS) ══ -->
+            <Border Background="{StaticResource CardSurface}"
+                    BorderBrush="{StaticResource CardBorder}"
+                    BorderThickness="1" CornerRadius="12"
+                    Padding="22,18" Margin="0,0,0,20">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="👥" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Project Team — Group G (7 Members)" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Text="UBIT · BSCS - 6th Semester" FontSize="12" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <UniformGrid Columns="3" Rows="3">
+                        <!-- Member 1 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="1" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Muhammad Noman" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006067" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 2 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="2" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Syed Haziq Zia Naqvi" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006102" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 3 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="3" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Syed Abdul Ali Naqvi" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006092" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 4 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="4" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Hasan Kamran" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006027" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 5 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="5" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Syed Muhammad Ahmed" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006112" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 6 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="6" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Syed Abeer Bin Haider" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006094" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Member 7 -->
+                        <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" Margin="0,0,10,0">
+                                    <TextBlock Text="7" FontWeight="Bold" FontSize="13" Foreground="{StaticResource StatusGreenText}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Usama Khan" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Text="Seat No: EB24210006124" FontSize="11.5" Foreground="{StaticResource AccentCyanBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- ══ SITE SPECIFICATIONS ══ -->
+            <Border Background="{StaticResource CardSurface}"
+                    BorderBrush="{StaticResource CardBorder}"
+                    BorderThickness="1" CornerRadius="12"
+                    Padding="22,18">
+                <StackPanel>
+                    <TextBlock Text="SITE CHARACTERISTICS &amp; OPERATIONAL BASELINE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,12"/>
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="6">
+                            <TextBlock Text="Active Pumps (s)" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="2 to 4 Multi-Server" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="Configurable parallel dispensers" FontSize="10.5" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Margin="6">
+                            <TextBlock Text="Mean Interarrival" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="3.0 min (20.0 veh/hr)" FontSize="14" FontWeight="Bold" Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock Text="Exp(λ) Poisson arrival flow" FontSize="10.5" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Margin="6">
+                            <TextBlock Text="Mean Service Duration" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="2.0 min / vehicle" FontSize="14" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                            <TextBlock Text="General &amp; stochastic service" FontSize="10.5" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                        <StackPanel Margin="6">
+                            <TextBlock Text="System Stability" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="ρ &lt; 1.0 Guaranteed" FontSize="14" FontWeight="Bold" Foreground="#FBBF24"/>
+                            <TextBlock Text="Dynamic boundary check" FontSize="10.5" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

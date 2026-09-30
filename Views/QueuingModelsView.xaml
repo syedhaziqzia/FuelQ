@@ -1,0 +1,375 @@
+<UserControl x:Class="FuelQ.Views.QueuingModelsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:FuelQ.Controls"
+             Background="{StaticResource CanvasBackground}"
+             FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,20,28,32">
+
+            <!-- ══ PAGE HEADER ══ -->
+            <TextBlock Text="Queueing Model Calculator" Style="{StaticResource PageTitle}" Margin="0,0,0,4"/>
+            <TextBlock Text="Shell Petrol Pump Maskan Branch · Select model → Enter parameters → Choose distributions → Calculate"
+                       Foreground="{StaticResource TextSecondary}" FontSize="12.5" Margin="0,0,0,16"/>
+
+            <!-- ══ MODEL SELECTION TABS (6 Models) ══ -->
+            <WrapPanel Margin="0,0,0,12">
+                <Button x:Name="BtnMM1" Content="M/M/1 (Single Server)" Click="ModelTab_Click" Tag="MM1"
+                        Style="{StaticResource PrimaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+                <Button x:Name="BtnMMS" Content="M/M/s (Multi Server)" Click="ModelTab_Click" Tag="MMS"
+                        Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+                <Button x:Name="BtnMG1" Content="M/G/1 (General Service)" Click="ModelTab_Click" Tag="MG1"
+                        Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+                <Button x:Name="BtnMGS" Content="M/G/s (Multi General Service)" Click="ModelTab_Click" Tag="MGS"
+                        Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+                <Button x:Name="BtnGG1" Content="G/G/1 (General Both)" Click="ModelTab_Click" Tag="GG1"
+                        Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+                <Button x:Name="BtnGGS" Content="G/G/s (Multi General Both)" Click="ModelTab_Click" Tag="GGS"
+                        Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Padding="14,8"/>
+            </WrapPanel>
+
+            <!-- ══ MODEL DESCRIPTION BANNER ══ -->
+            <Border Background="#0C1B35" BorderBrush="{StaticResource AccentCyanBrush}" BorderThickness="1" CornerRadius="8" Padding="16,10" Margin="0,0,0,16">
+                <TextBlock x:Name="TxtModelDescription"
+                           Text="🟢 M/M/1: Single server. Poisson arrivals + Exponential service (both fixed). Lq = ρ²/(1−ρ)."
+                           FontSize="12.5" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- ══ CORE INPUTS CARD ══ -->
+            <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="10" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="01  CORE INPUT PARAMETERS" Style="{StaticResource SectionLabel}"/>
+
+                    <!-- Time Unit & Customer Count -->
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="TIME UNIT" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="CbTimeUnit" SelectionChanged="Param_Changed">
+                                <ComboBoxItem Content="Minutes" IsSelected="True"/>
+                                <ComboBoxItem Content="Seconds"/>
+                                <ComboBoxItem Content="Hours"/>
+                            </ComboBox>
+                            <TextBlock Text="All times/rates are interpreted in this unit" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,3,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="NUMBER OF CUSTOMERS (RECORD / REF)" Style="{StaticResource FieldLabel}"/>
+                            <TextBox x:Name="TbNumCustomers" Text="1" TextChanged="Param_Changed"/>
+                            <TextBlock Text="Steady-state formulas assume infinite customer population" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Separator Background="{StaticResource CardBorder}" Margin="0,4,0,14"/>
+
+                    <!-- Arrival Input Mode & Value -->
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="ARRIVAL INPUT MODE" Style="{StaticResource FieldLabel}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,8">
+                                <RadioButton x:Name="RbArrivalMean" Content="Mean Interarrival Time (1/λ)" IsChecked="True" Checked="ArrivalMode_Changed" Foreground="{StaticResource TextPrimary}" Margin="0,0,14,0"/>
+                                <RadioButton x:Name="RbArrivalRate" Content="Arrival Rate (λ)" Checked="ArrivalMode_Changed" Foreground="{StaticResource TextPrimary}"/>
+                            </StackPanel>
+                            <TextBox x:Name="TbArrivalVal" Text="3" TextChanged="Param_Changed"/>
+                            <TextBlock x:Name="TxtArrivalHint" Text="λ = 1 ÷ this value (Mean headway between vehicle arrivals)" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,3,0,0"/>
+                        </StackPanel>
+
+                        <!-- Service Input Mode & Value -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="SERVICE INPUT MODE" Style="{StaticResource FieldLabel}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,4,0,8">
+                                <RadioButton x:Name="RbServiceMean" Content="Mean Service Time (1/μ)" IsChecked="True" Checked="ServiceMode_Changed" Foreground="{StaticResource TextPrimary}" Margin="0,0,14,0"/>
+                                <RadioButton x:Name="RbServiceRate" Content="Service Rate (μ)" Checked="ServiceMode_Changed" Foreground="{StaticResource TextPrimary}"/>
+                            </StackPanel>
+                            <TextBox x:Name="TbServiceVal" Text="2" TextChanged="Param_Changed"/>
+                            <TextBlock x:Name="TxtServiceHint" Text="μ = 1 ÷ this value (Mean duration to fuel one vehicle)" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Multi-Server Servers Input (s) -->
+                    <StackPanel x:Name="PanelServers" Visibility="Collapsed" Margin="0,0,0,14">
+                        <Separator Background="{StaticResource CardBorder}" Margin="0,0,0,12"/>
+                        <TextBlock Text="NUMBER OF SERVERS / PUMPS (s)" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="TbNumServers" Text="2" Width="180" HorizontalAlignment="Left" TextChanged="Param_Changed"/>
+                        <TextBlock Text="Active parallel dispensers available to incoming vehicles" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,3,0,0"/>
+                    </StackPanel>
+
+                    <!-- Real-Time Derived Display -->
+                    <Border Background="#070D1D" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,4,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="ARRIVAL RATE (λ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock x:Name="TxtDerivedLambda" Text="0.3333 /min" FontSize="15" FontWeight="Bold" Foreground="{StaticResource AccentCyanBrush}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="SERVICE RATE (μ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock x:Name="TxtDerivedMu" Text="0.5000 /min" FontSize="15" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="TRAFFIC INTENSITY (a)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock x:Name="TxtDerivedA" Text="0.6667" FontSize="15" FontWeight="Bold" Foreground="#FBBF24"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3">
+                                <TextBlock x:Name="TxtRhoTitle" Text="UTILIZATION (ρ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock x:Name="TxtDerivedRho" Text="66.7%" FontSize="15" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+            <!-- ══ DISTRIBUTION SELECTION CARD ══ -->
+            <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="10" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="02  DISTRIBUTION SELECTION" Style="{StaticResource SectionLabel}"/>
+
+                    <!-- Arrival Distribution -->
+                    <TextBlock Text="ARRIVAL DISTRIBUTION" Style="{StaticResource FieldLabel}" Margin="0,4,0,6"/>
+                    <Border x:Name="PanelArrivalFixed" Background="#0C1B35" BorderBrush="{StaticResource AccentCyanBrush}" BorderThickness="1" CornerRadius="6" Padding="12,6" Margin="0,0,0,12">
+                        <TextBlock Text="🔒 Poisson Process (Exponential Interarrival Times — Fixed Ca = 1.0)" FontSize="12" Foreground="{StaticResource AccentCyanBrush}" FontWeight="SemiBold"/>
+                    </Border>
+                    <StackPanel x:Name="PanelArrivalChoice" Visibility="Collapsed" Margin="0,0,0,12">
+                        <ComboBox x:Name="CbArrivalDist" SelectionChanged="ArrivalDist_Changed" Margin="0,0,0,8">
+                            <ComboBoxItem Content="Exponential (Memoryless, Ca = 1.0)" IsSelected="True"/>
+                            <ComboBoxItem Content="Uniform [a, b]"/>
+                            <ComboBoxItem Content="Normal (Gaussian)"/>
+                        </ComboBox>
+                        <!-- Arrival Uniform Fields -->
+                        <Grid x:Name="PanelArrivalUniform" Visibility="Collapsed" Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="MIN INTERARRIVAL TIME (a)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbArrUniformMin" Text="2" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="MAX INTERARRIVAL TIME (b)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbArrUniformMax" Text="4" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- Arrival Normal Fields -->
+                        <Grid x:Name="PanelArrivalNormal" Visibility="Collapsed" Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="STD DEV (σ_a)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbArrNormalStd" Text="1" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="VARIANCE (σ_a²)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbArrNormalVar" Text="1" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <Separator Background="{StaticResource CardBorder}" Margin="0,4,0,12"/>
+
+                    <!-- Service Distribution -->
+                    <TextBlock Text="SERVICE DISTRIBUTION" Style="{StaticResource FieldLabel}" Margin="0,4,0,6"/>
+                    <Border x:Name="PanelServiceFixed" Background="#0F2B1D" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" CornerRadius="6" Padding="12,6" Margin="0,0,0,8">
+                        <TextBlock Text="🔒 Exponential Service Distribution (Fixed Cs = 1.0)" FontSize="12" Foreground="{StaticResource StatusGreenText}" FontWeight="SemiBold"/>
+                    </Border>
+                    <StackPanel x:Name="PanelServiceChoice" Visibility="Collapsed">
+                        <ComboBox x:Name="CbServiceDist" SelectionChanged="ServiceDist_Changed" Margin="0,0,0,8">
+                            <ComboBoxItem Content="Exponential (Cs = 1.0)" IsSelected="True"/>
+                            <ComboBoxItem Content="Uniform [a, b]"/>
+                            <ComboBoxItem Content="Normal (Gaussian)"/>
+                        </ComboBox>
+                        <!-- Service Uniform Fields -->
+                        <Grid x:Name="PanelServiceUniform" Visibility="Collapsed" Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="MIN SERVICE TIME (a)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbSvcUniformMin" Text="1.5" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="MAX SERVICE TIME (b)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbSvcUniformMax" Text="4.5" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- Service Normal Fields -->
+                        <Grid x:Name="PanelServiceNormal" Visibility="Collapsed" Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="STD DEV (σ_s)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbSvcNormalStd" Text="1" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="VARIANCE (σ_s²)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TbSvcNormalVar" Text="1" TextChanged="Param_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- ══ ACTION BUTTONS ══ -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <Button Content="▶  Calculate Metrics" Style="{StaticResource PrimaryButton}" Click="Calculate_Click" Padding="20,10" Margin="0,0,10,0"/>
+                <Button Content="↺  Reset Defaults" Style="{StaticResource SecondaryButton}" Click="Reset_Click" Padding="16,10" Margin="0,0,10,0"/>
+                <Button Content="🚀  Go to Simulator (DES)" Style="{StaticResource SecondaryButton}" Click="GoToSimulator_Click" Padding="16,10"/>
+            </StackPanel>
+
+            <!-- ══ RESULTS SECTION ══ -->
+            <StackPanel x:Name="PanelResults">
+
+                <!-- Stability Banner -->
+                <Border x:Name="BorderStability" Background="#0C2519" BorderBrush="{StaticResource StatusGreenBorder}" BorderThickness="1" CornerRadius="8" Padding="16,12" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock x:Name="TxtStabilityTitle" Text="✓ SYSTEM STABLE  (ρ &lt; 1.0)" FontSize="14" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                        <TextBlock x:Name="TxtStabilityDetail" Text="The service facility operates within steady-state capacity limits." FontSize="12" Foreground="{StaticResource TextPrimary}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 10 Metric Cards Grid -->
+                <UniformGrid Columns="5" Rows="2" Margin="0,0,0,16">
+                    <!-- λ -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="ARRIVAL RATE (λ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricLambda" Text="0.3333" FontSize="20" FontWeight="Bold" Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock x:Name="MetricLambdaUnit" Text="vehicles / min" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- μ -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="SERVICE RATE (μ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricMu" Text="0.5000" FontSize="20" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                            <TextBlock x:Name="MetricMuUnit" Text="vehicles / min" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- a -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="TRAFFIC INTENSITY (a)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricA" Text="0.6667" FontSize="20" FontWeight="Bold" Foreground="#FBBF24"/>
+                            <TextBlock Text="Offered Load (Erlangs)" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- ρ -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="UTILIZATION (ρ)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricRho" Text="66.7%" FontSize="20" FontWeight="Bold" Foreground="{StaticResource StatusGreenText}"/>
+                            <TextBlock Text="Server Busy Fraction" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- P0 -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="IDLE PROBABILITY (P₀)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricP0" Text="33.3%" FontSize="20" FontWeight="Bold" Foreground="{StaticResource AccentCyanBrush}"/>
+                            <TextBlock Text="P(0 customers in system)" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Pw -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="WAIT PROBABILITY (Pw)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricPw" Text="66.7%" FontSize="20" FontWeight="Bold" Foreground="#C084FC"/>
+                            <TextBlock Text="P(Wait > 0 / Erlang-C)" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Lq -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="AVG QUEUE LENGTH (Lq)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricLq" Text="1.3333" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="vehicles in queue" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Wq -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="AVG WAIT IN QUEUE (Wq)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricWq" Text="4.0000" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock x:Name="MetricWqUnit" Text="minutes in queue" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- L -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="AVG SYSTEM LENGTH (L)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricL" Text="2.0000" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="vehicles in system" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- W -->
+                    <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="4">
+                        <StackPanel>
+                            <TextBlock Text="AVG TIME IN SYSTEM (W)" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock x:Name="MetricW" Text="6.0000" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock x:Name="MetricWUnit" Text="minutes total time" FontSize="10" Foreground="{StaticResource TextMuted}"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <!-- Mathematical Formula Breakdown Card -->
+                <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="10" Padding="18,14" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="MATHEMATICAL FORMULAS &amp; GOVERNING EQUATIONS" Style="{StaticResource SectionLabel}"/>
+                        <TextBlock x:Name="TxtFormulaBreakdown"
+                                   Text="Lq = ρ²/(1−ρ) · Wq = Lq/λ · L = Lq + a · W = Wq + 1/μ · P₀ = 1−ρ · Pw = ρ"
+                                   FontFamily="Consolas" FontSize="12.5" Foreground="{StaticResource AccentCyanBrush}" TextWrapping="Wrap" Margin="0,4,0,8"/>
+                        <TextBlock x:Name="TxtFormulaDetails"
+                                   Text="Exact steady-state Markovian single-server queue with Poisson arrivals and exponential service times."
+                                   FontSize="11.5" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Distribution State Probabilities Table (P(n)) -->
+                <Border Background="{StaticResource CardSurface}" BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="10" Padding="18,14">
+                    <StackPanel>
+                        <TextBlock Text="SYSTEM STATE PROBABILITIES P(n)" Style="{StaticResource SectionLabel}"/>
+                        <TextBlock Text="Probability of exactly n vehicles being in the forecourt at steady-state" FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,10"/>
+                        <DataGrid x:Name="GridStateProbabilities" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                                  Background="Transparent" BorderThickness="0" RowBackground="{StaticResource RowBase}" AlternatingRowBackground="{StaticResource RowAlternate}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="State (n)" Binding="{Binding N}" Width="80"/>
+                                <DataGridTextColumn Header="Probability P(n)" Binding="{Binding PnStr}" Width="160"/>
+                                <DataGridTextColumn Header="Percentage %" Binding="{Binding PctStr}" Width="160"/>
+                                <DataGridTextColumn Header="Cumulative P(≤ n)" Binding="{Binding CumStr}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

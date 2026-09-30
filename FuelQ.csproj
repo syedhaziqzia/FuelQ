@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+
+    <!-- Application metadata -->
+    <AssemblyName>FuelQ</AssemblyName>
+    <RootNamespace>FuelQ</RootNamespace>
+    <ApplicationTitle>FuelQ — Shell Maskan Forecourt Simulator</ApplicationTitle>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Authors>Syed Haziq Zia Naqvi, Group G</Authors>
+    <Company>Department of Computer Science (UBIT), University of Karachi</Company>
+    <Product>FuelQ — Shell Petrol Pump Maskan Branch Simulator</Product>
+    <Description>Stochastic queuing analytics and Discrete Event Simulator (DES) for Shell Petrol Pump forecourt.</Description>
+    <Copyright>Copyright © 2026 Syed Haziq Zia Naqvi &amp; Group G, BSCS 6th Semester, UBIT - University of Karachi</Copyright>
+
+    <!-- Warnings -->
+    <!-- CS8618: Non-nullable field uninitialized — suppressed for WPF XAML-bound properties -->
+    <NoWarn>$(NoWarn);CS8618</NoWarn>
+
+    <!-- Deterministic build for reproducibility -->
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AppLogo.jpg" />
+  </ItemGroup>
+</Project>

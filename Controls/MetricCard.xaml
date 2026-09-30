@@ -1,0 +1,43 @@
+<UserControl x:Class="FuelQ.Controls.MetricCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+    <Border Background="{StaticResource CardSurface}"
+            BorderBrush="{StaticResource CardBorder}"
+            BorderThickness="1"
+            CornerRadius="10"
+            ClipToBounds="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Accent top bar -->
+            <Border Grid.Row="0"
+                    Background="{Binding AccentColor, ElementName=Root}"
+                    CornerRadius="10,10,0,0"/>
+
+            <!-- Content -->
+            <StackPanel Grid.Row="1" Margin="14,10,14,12">
+                <TextBlock Text="{Binding Symbol, ElementName=Root}"
+                           Foreground="{StaticResource TextSecondary}"
+                           FontSize="10" FontWeight="SemiBold"
+                           TextOptions.TextFormattingMode="Display"
+                           Margin="0,0,0,3"/>
+                <TextBlock Text="{Binding MetricValue, ElementName=Root}"
+                           Foreground="{StaticResource AccentCyanBrush}"
+                           FontSize="26" FontWeight="Bold" LineHeight="28"
+                           TextTrimming="CharacterEllipsis"/>
+                <TextBlock Text="{Binding MetricLabel, ElementName=Root}"
+                           Foreground="{StaticResource TextSecondary}"
+                           FontSize="11" Margin="0,2,0,0"
+                           TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding FormulaText, ElementName=Root}"
+                           Foreground="{StaticResource TextMuted}"
+                           FontSize="9" FontStyle="Italic"
+                           Margin="0,3,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
