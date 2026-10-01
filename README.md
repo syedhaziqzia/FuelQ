@@ -91,7 +91,7 @@ To run any C# program, your computer needs the free **.NET SDK** from Microsoft.
 ---
 
 ### 5. Simulation Verification & Interactive Charts
-*Theoretical vs. Simulated side-by-side delta error validation, dynamic Queue Length timeline $Q(t)$, and Waiting Time Histogram.*
+*Theoretical vs. Simulated side-by-side delta error validation, dynamic Queue Length timeline Q(t), and Waiting Time Histogram.*
 
 ![Simulation Comparison and Charts](Assets/screenshot-05.png)
 
@@ -99,11 +99,11 @@ To run any C# program, your computer needs the free **.NET SDK** from Microsoft.
 
 ## 🌟 Key Features
 
-* **Analytical Queueing Solvers:** Exact and approximation solutions for 8 Kendall models: $M/M/1$, $M/M/s$ (Erlang-C), $M/G/1$ (Pollaczek-Khinchine), $M/G/s$ (Allen-Cunneen), $G/G/1$ (Kingman), $G/G/s$, $M/D/1$, and $M/E_k/1$.
+* **Analytical Queueing Solvers:** Exact and approximation solutions for 8 Kendall models: **M/M/1**, **M/M/s** (Erlang-C), **M/G/1** (Pollaczek-Khinchine), **M/G/s** (Allen-Cunneen), **G/G/1** (Kingman), **G/G/s**, **M/D/1**, and **M/E_k/1**.
 * **Discrete Event Simulation (DES):** Priority-queue stochastic simulator supporting Exponential, Normal (Box-Muller), Uniform, and Gamma distributions with multi-pump shortest-queue routing.
 * **Forecourt-Specific Modeling:** Tailored simulation calibrated for Shell Maskan with a 70/30 motorcycle/car fleet mix and cash vs. card lane segregation.
-* **Empirical Data & Goodness-of-Fit:** 320-vehicle observation dataset, IQR outlier filtering, and a Chi-Square ($\chi^2$) Goodness-of-Fit test ($\alpha = 0.05$).
-* **Model Benchmarking & Sensitivity:** Side-by-side analytical vs. simulated validation, $L_q \text{ vs } \rho$ sensitivity curves, and one-click LaTeX table exports.
+* **Empirical Data & Goodness-of-Fit:** 320-vehicle observation dataset, IQR outlier filtering, and a Chi-Square (χ²) Goodness-of-Fit test (α = 0.05).
+* **Model Benchmarking & Sensitivity:** Side-by-side analytical vs. simulated validation, Lq vs. ρ sensitivity curves, and one-click LaTeX table exports.
 * **AI Prompts & Engineering Audit:** Complete transparency log of prompt engineering and architectural validation.
 
 ---
@@ -112,14 +112,14 @@ To run any C# program, your computer needs the free **.NET SDK** from Microsoft.
 
 | Kendall Model | Queue Length ($L_q$) / Wait Time ($W_q$) Formula | Classification |
 | :--- | :--- | :--- |
-| **$M/M/1$** | $L_q = \frac{\rho^2}{1 - \rho}$ | Exact closed-form |
-| **$M/M/s$** | $L_q = \frac{C(s, a) \cdot \rho}{1 - \rho}$ *(where $C(s, a)$ is Erlang-C)* | Exact closed-form |
-| **$M/G/1$** | $W_q = \frac{\lambda (\sigma^2 + 1/\mu^2)}{2(1 - \rho)}$ *(Pollaczek-Khinchine)* | Exact mean-value |
-| **$M/G/s$** | $W_q \approx \left(\frac{1 + C_s^2}{2}\right) W_q(M/M/s)$ *(Allen-Cunneen)* | Approximation |
-| **$G/G/1$** | $W_q \approx \left(\frac{C_a^2 + C_s^2}{2}\right) \left(\frac{\rho}{1 - \rho}\right) \frac{1}{\mu}$ *(Kingman)* | Heavy-traffic approximation |
-| **$G/G/s$** | $W_q \approx \left(\frac{C_a^2 + C_s^2}{2}\right) W_q(M/M/s)$ *(Allen-Cunneen)* | Approximation |
-| **$M/D/1$** | $L_q = \frac{\rho^2}{2(1 - \rho)}$ *(Deterministic service, $\sigma = 0$)* | Exact closed-form |
-| **$M/E_k/1$** | $L_q = \left(\frac{1 + k}{2k}\right) \frac{\rho^2}{1 - \rho}$ *(Erlang-$k$ service)* | Exact closed-form |
+| **M/M/1** | `Lq = ρ² / (1 - ρ)` | Exact closed-form |
+| **M/M/s** | `Lq = [C(s, a) · ρ] / (1 - ρ)` *(where C(s, a) is Erlang-C)* | Exact closed-form |
+| **M/G/1** | `Wq = [λ · (σ² + 1/μ²)] / [2 · (1 - ρ)]` *(Pollaczek-Khinchine)* | Exact mean-value |
+| **M/G/s** | `Wq ≈ [(1 + Cs²) / 2] · Wq(M/M/s)` *(Allen-Cunneen)* | Approximation |
+| **G/G/1** | `Wq ≈ [(Ca² + Cs²) / 2] · [ρ / (1 - ρ)] · (1 / μ)` *(Kingman)* | Heavy-traffic approximation |
+| **G/G/s** | `Wq ≈ [(Ca² + Cs²) / 2] · Wq(M/M/s)` *(Allen-Cunneen)* | Approximation |
+| **M/D/1** | `Lq = ρ² / [2 · (1 - ρ)]` *(Deterministic service, σ = 0)* | Exact closed-form |
+| **M/Ek/1** | `Lq = [(1 + k) / (2k)] · [ρ² / (1 - ρ)]` *(Erlang-k service)* | Exact closed-form |
 
 ---
 
